@@ -1,4 +1,5 @@
 'use strict'
+const { settings } = require('nprogress')
 const path = require('path')
 const defaultSettings = require('./src/settings.js')
 
@@ -13,6 +14,7 @@ const name = defaultSettings.title || 'vue Admin Template' // page title
 // For example, Mac: sudo npm run
 // You can change the port by the following methods:
 // port = 9528 npm run dev OR npm run dev --port = 9528
+// settings.js 设置端口号
 const port = process.env.port || process.env.npm_config_port || 9528 // dev port
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
@@ -36,7 +38,17 @@ module.exports = {
       warnings: false,
       errors: true
     },
-    before: require('./mock/mock-server.js')
+    // before: require('./mock/mock-server.js') //Mock()
+    // 配置反向代理
+    proxy: {
+      // 当我们的本地的请求有/api的时候，就会代理我们的请求地址向另外一个服务器发出请求
+      '/api': {
+        target: 'http://ihrm.itheima.net/', // 要代理的服务器地址  不用写api
+        changeOrigin: true // 是否跨域
+        // 重写路径
+        // pathRewrite:{}
+      }
+    }
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
